@@ -1,0 +1,319 @@
+<!DOCTYPE html>  
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>3-Lab-Instructions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style id="mkstylesheet">
+body{-webkit-font-smoothing:antialiased;font-family:"Helvetica Neue",Helvetica,Arial,Verdana,sans-serif;margin:30px 0 0;padding:0;background:#fff}#wrapper{padding:20px}li{font-size:110%}li li{font-size:100%}li p{font-size:100%;margin:.5em 0}h1{color:#000}h2{color:#111}h3{color:#111;margin:0}h4{color:#111}h5{color:#111}h6{font-size:1em;line-height:1.5em;margin:1.5em 0}body,p,td,div{color:#111;font-family:"Helvetica Neue",Helvetica,Arial,Verdana,sans-serif;word-wrap:break-word}a{color:#0d6ea1;text-decoration:none;-webkit-transition:color 0.2s ease-in-out;-moz-transition:color 0.2s ease-in-out;-o-transition:color 0.2s ease-in-out;-ms-transition:color 0.2s ease-in-out;transition:color 0.2s ease-in-out}a:hover{color:#3593d9}body{font-size:15px;line-height:21px;margin:0 auto}h1{font-size:37px;line-height:42px;margin-top:42px;margin-bottom:21px}h2{font-size:27px;line-height:42px;margin-top:42px;margin-bottom:21px}h3{font-size:20px;line-height:21px;margin-top:21px;margin-bottom:21px}h4{font-size:20px;line-height:21px;margin-top:21px;margin-bottom:21px}p,ul,ol,pre,table,blockquote{margin-top:21px;margin-bottom:21px}hr{border:1px solid;margin:-1px 0}ul ul,ol ol,ul ol,ol ul{margin-top:0;margin-bottom:0}b,strong,em,small,code{line-height:1}.footnote{color:#0d6ea1;font-size:.8em;vertical-align:super}abbr,acronym{border-bottom:1px dotted #aaa}#wrapper img{max-width:100%;height:auto}dd{font-size:1em;margin-bottom:1em}li>p:first-child{margin:0}ul ul,ul ol{margin-bottom:.4em}caption,col,colgroup,table,tbody,td,tfoot,th,thead,tr{border-spacing:0}table{border:1px solid rgba(0,0,0,0.25);border-collapse:collapse;display:table;empty-cells:hide;margin:-1px 0 1.3125em;padding:0;table-layout:fixed}caption{display:table-caption;font-weight:700}col{display:table-column}colgroup{display:table-column-group}tbody{display:table-row-group}tfoot{display:table-footer-group}thead{display:table-header-group}td,th{display:table-cell}tr{display:table-row}table th,table td{font-size:1.1em;line-height:1.3;padding:.5em 1em 0}table thead{background:rgba(0,0,0,0.15);border:1px solid rgba(0,0,0,0.15);border-bottom:1px solid rgba(0,0,0,0.2)}table tbody{background:rgba(0,0,0,0.05)}table tfoot{background:rgba(0,0,0,0.15);border:1px solid rgba(0,0,0,0.15);border-top:1px solid rgba(0,0,0,0.2)}figure{display:inline-block;overflow:hidden;position:relative;margin:1em 0 2em}figcaption{font-style:italic;text-align:center;background:white;color:#666}.poetry pre{display:block;font-family:Georgia,Garamond,serif !important;font-size:110% !important;font-style:italic;line-height:1.6em;margin-left:1em}.poetry pre code{font-family:Georgia,Garamond,serif !important;word-break:break-all;word-break:break-word;-webkit-hyphens:auto;-moz-hyphens:auto;hyphens:auto;white-space:pre-wrap}blockquote p{font-size:110%;font-style:italic;line-height:1.6em}sup,sub,a.footnote{font-size:1.4ex;height:0;line-height:1;position:relative;vertical-align:super}sub{vertical-align:sub;top:-1px}p,h5{font-size:1.1429em;line-height:1.3125em;margin:1.3125em 0}dt,th{font-weight:700}table tr:nth-child(odd),table th:nth-child(odd),table td:nth-child(odd){background:rgba(255,255,255,0.06)}table tr:nth-child(even),table td:nth-child(even){background:rgba(200,200,200,0.25)}@media print{img,table,figure{page-break-inside:avoid}#wrapper{background:#fff;color:#303030;padding:10px;position:relative;text-indent:0}}@media screen{.inverted{background:#252a2a}.inverted #wrapper{background:#252a2a;color:#eee}.inverted hr{border-color:#333f40 !important}.inverted p,.inverted td,.inverted li,.inverted h1,.inverted h2,.inverted h3,.inverted h4,.inverted h5,.inverted h6,.inverted th,.inverted .math,.inverted caption,.inverted dt,.inverted dd{color:#eee}.inverted pre{background:#ccc}.inverted pre code{color:#111}.inverted table{background:none}.inverted table tr:nth-child(odd),.inverted table td:nth-child(odd){background:none}.inverted a{color:#acd1d5}::selection{background:rgba(157,193,200,0.5)}h1::selection{background-color:rgba(45,156,208,0.3)}h2::selection{background-color:rgba(90,182,224,0.3)}h3::selection,h4::selection,h5::selection,h6::selection,li::selection,ol::selection{background-color:rgba(133,201,232,0.3)}code::selection{background-color:rgba(0,0,0,0.7);color:#eee}code span::selection{background-color:rgba(0,0,0,0.7) !important;color:#eee !important}a::selection{background-color:rgba(255,230,102,0.2)}.inverted a::selection{background-color:rgba(255,230,102,0.6)}td::selection,th::selection,caption::selection{background-color:rgba(180,237,95,0.5)}}
+
+@media print{
+#generated-toc-clone,#generated-toc{display:none!important}
+}
+#generated-toc-clone li.missing,#mkreplaced-toc li.missing{list-style-type:none!important}#generated-toc-clone li, #mkreplaced-toc li{list-style-type:upper-roman}#generated-toc-clone li li, #mkreplaced-toc li li{list-style-type:decimal}#generated-toc-clone li li li,#mkreplaced-toc li li li{list-style-type:decimal-leading-zero}#generated-toc-clone li li li li,#mkreplaced-toc li li li li{list-style-type:lower-greek}#generated-toc-clone li li li li li,#mkreplaced-toc li li li li li{list-style-type:disc}#generated-toc-clone li li li li li li,#mkreplaced-toc li li li li li li{list-style-type:square}
+</style>
+
+</head>
+<body class="normal firstload">
+  <div id="wrapper">
+      <h1 id="301:apparchitecturepart3:labinstructions">301: App Architecture, Part 3: Lab Instructions</h1>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>At this point, you have moved the domain model and domain logic out of the view controllers. That&#8217;s already a big improvement, but the view controllers still do way too much.</p>
+
+<p>In particular, each view controller has its own networking code.</p>
+
+<p>You will now move all of this networking stuff into its own set of classes. This is often called the &#8220;networking layer&#8221;.</p>
+
+<figure>
+<img src="Images/Layers.png" alt="" />
+</figure>
+
+<p>The responsibilities of an app can be divided into different layers. Each layer is independent of the one above it. A typical app may have a data storage layer, networking layer, application layer, presentation layer, and a user interface layer.</p>
+
+<p>Moving the networking code into its own layer has a big advantage: you can now change the networking logic without requiring any changes to the view controllers. Again, this is <em>decoupling</em> in action.</p>
+
+<p>For example, right now each view controller uses <code>NSURLSession.sharedSession()</code>. What if you want to use an <code>NSURLSession</code> with a custom configuration? Without a networking layer, you&#8217;d have to change this across all the view controllers, rather than in one single place.</p>
+
+<p>The networking layer for Bidly looks like this:</p>
+
+<figure>
+<img src="Images/NetworkingLayer.png" alt="" />
+</figure>
+
+<p>The entry point for all networking operations is the <code>ServerAPI</code> object. </p>
+
+<p>Each different networking request gets its own class. The networking requests that happen in this app are:</p>
+
+<ul>
+<li>Getting the latest bids for the items you’re watching (<code>LatestBidsRequest</code>)</li>
+<li>Searching for items (<code>SearchRequest</code>)</li>
+<li>Creating a new bid (<code>NewBidRequest</code>)</li>
+<li>Downloading a photo of the item (handled by a <code>UIImageView</code> extension)</li>
+</ul>
+
+<p>It makes sense to wrap up each request into an object of its own, so you can pass them around, store them, queue them up, and so on.</p>
+
+<p>These request objects send the HTTP requests to the server, handle the incoming data, and then notify the app about the results. The rest of the app doesn&#8217;t need to worry about <code>NSURLSession</code>, HTTP, parsing JSON, cookies, caching, encryption, and so on. </p>
+
+<p>If this were a real app, <code>ServerAPI</code> would also handle authentication and the login screen.</p>
+
+<h2 id="letsgetstarted">Let&#8217;s get started</h2>
+
+<p>Open the starter project from the <strong>3-Lab Starter</strong> folder.</p>
+
+<p>Notice how the project has been reorganized a bit:</p>
+
+<figure>
+<img src="Images/ProjectNavigator.png" alt="" />
+</figure>
+
+<p>There is a new <strong>Networking Layer</strong> group that contains the <code>ServerAPI</code> class and the classes for the various API requests.</p>
+
+<p><code>ServerRequest</code> and <code>ServerRequestJSON</code> are base classes that encapsulate the code that all these requests have in common.</p>
+
+<h2 id="activityviewcontroller">Activity View Controller</h2>
+
+<p>The <code>ActivityViewController</code> is the first tab of the app. This screen shows the latest bids for each of the items you&#8217;re watching. It polls the server every 10 seconds to check if there are any new bids available and then reloads its table view.</p>
+
+<figure>
+<img src="Images/Polling.png" alt="" />
+</figure>
+
+<p>You will now replace the networking logic that happens in <code>ActivityViewController</code> by moving it into the networking layer.</p>
+
+<h3 id="injectingtheserverapiobject">Injecting the ServerAPI object</h3>
+
+<p>Each view controller that wants to perform network requests needs to have a reference to the <code>ServerAPI</code> object. As before, you will use <em>dependency injection</em> to pass this object around.</p>
+
+<p>Add the following property to <strong>ActivityViewController.swift</strong>:</p>
+
+<pre><code>var serverAPI: ServerAPI!
+</code></pre>
+
+<p>(The other view controllers already have this property.)</p>
+
+<p>The <code>ServerAPI</code> instance is created in <strong>AppDelegate.swift</strong> and given to all the view controllers that need it. Add the following line to <code>didFinishLaunchingWithOptions</code>:</p>
+
+<pre><code>activityViewController.serverAPI = serverAPI
+</code></pre>
+
+<p>The <code>ActivityViewController</code> also needs to pass this object to the <code>ItemDetailViewController</code>. When the user taps a row in the table view, the <code>ActivityViewController</code> will segue to the Item Detail screen. </p>
+
+<p>The <code>ItemDetailViewController</code> itself does not use the <code>ServerAPI</code> object. However, the Item Detail screen in turn can segue to <code>NewBidViewController</code>, which <em>does</em> require <code>ServerAPI</code>.</p>
+
+<figure>
+<img src="Images/DependencyInjection.png" alt="" />
+</figure>
+
+<p>So you must pass this object along in <strong>ActivityViewController.swift</strong>&#8217;s <code>prepareForSegue(sender)</code>. Add this line to that method:</p>
+
+<pre><code>controller.serverAPI = serverAPI
+</code></pre>
+
+<p>Note: This is a small disadvantage of using dependency injection. The Item Detail screen doesn’t use <code>ServerAPI</code> but still needs to have it because of <code>NewBidViewController</code>.</p>
+
+<h3 id="replacingthenetworkinglogicwithlatestbidsrequest">Replacing the networking logic with LatestBidsRequest</h3>
+
+<p>The <code>refresh()</code> method in <strong>ActivityViewController.swift</strong> currently uses an <code>NSURLSessionDataTask</code> to send an HTTP request to the server, and then parses the JSON results.</p>
+
+<p>You will now replace this with <code>LatestBidRequest</code> from the networking layer.</p>
+
+<p>In <strong>ActivityViewController.swift</strong> replace the <code>dataTask</code> property with:</p>
+
+<pre><code>private var request: LatestBidsRequest?
+</code></pre>
+
+<p>In <code>refresh()</code>, remove everything from the line <code>dataTask?.cancel()</code> to the end of the method, and replace it by the following:</p>
+
+<pre><code>request?.cancel()
+
+let url = urlForWatchedItems()  
+request = LatestBidsRequest(url: url) { results in
+
+  // Add the new bids to the watchlist  
+  if let results = results as? [JSONDictionary] {  
+    for json in results {  
+      let bid = Bid(JSON: json)  
+      let itemID = json[&quot;itemID&quot;] as Int  
+      self.watchlist.addBid(bid, forItemWithID: itemID)  
+    }
+  }  
+  self.watchlist.saveWatchlist()
+
+  // Update the user interface  
+  self.bids = self.watchlist.allBids  
+  self.tableView.reloadData()  
+  self.refreshControl?.endRefreshing()  
+  self.request = nil  
+}
+
+serverAPI.sendRequest(request!)
+</code></pre>
+
+<p>This still does the same things as before, except that all the networking code has been abstracted away inside <code>LatestBidsRequest</code>.</p>
+
+<p>What remains is only &#8220;application layer&#8221; logic, which gets performed in the request&#8217;s completion handler.</p>
+
+<p>You no longer have to worry about all these things:</p>
+
+<ul>
+<li>setting up the <code>NSURLSession</code></li>
+<li>enabling and disabling <code>networkActivityIndicatorVisible</code></li>
+<li>using <code>dispatch_async()</code> to make sure things happen on the main queue</li>
+<li>checking the status code of the <code>NSHTTPURLResponse</code></li>
+<li>and a myriad of other small details.</li>
+</ul>
+
+<p><code>LatestBidRequest</code> performs the request on the server, parses the JSON results, and returns an array of <code>JSONDictionary</code> objects.</p>
+
+<p>It is still up to the view controller to turn this in to <code>Bid</code> objects and add them to the <code>Watchlist</code>. In other words, the networking layer is independent of the domain layer. It doesn&#8217;t know anything about <code>Bid</code>, <code>Item</code>, or <code>Watchlist</code>. It just does networking stuff.</p>
+
+<p>Of course, <code>LatestBidRequest</code> also does not touch the UI. Any UI updates such as reloading the table view are still the responsibility of the view controller.</p>
+
+<p>To complete these changes, do the following:</p>
+
+<ul>
+<li><p>In <code>timerFired()</code>, replace <code>dataTask</code> with <code>request</code>.</p></li>
+<li><p>Remove the <code>parseJSON()</code> method. Parsing the JSON data is now done by <code>LatestBidRequest</code>.</p></li>
+</ul>
+
+<p>Build and run, and pull-to-refresh to make sure the Activity screen still works.</p>
+
+<h2 id="periodiccheckforbids">PeriodicCheckForBids</h2>
+
+<p>Having moved the networking code out of <code>ActivityViewController</code> and into <code>ServerAPI</code> and <code>LatestBidRequest</code> is pretty good already, but you can do even better. </p>
+
+<p>Is it really the view controller&#8217;s responsibility to periodically check the server for new bids? That sounds like a task that can be put into an object of its own.</p>
+
+<p>Add a new Swift file to the project, <strong>PeriodicCheckForBids.swift</strong>. Put it inside the <strong>View the latest bids</strong> group.</p>
+
+<p>(Note: This new class isn’t really part of the networking code, even though it uses the <code>ServerAPI</code>, nor is it part of the domain model, even though it uses the <code>Watchlist</code> and <code>Bid</code> classes. It sits somewhere in between, creating the logic that is specific to this particular app. This is commonly called the &#8220;Application Layer&#8221;.)</p>
+
+<p>Add the following code into this new file:</p>
+
+<pre><code>class PeriodicCheckForBids {  
+  var serverAPI: ServerAPI!
+
+  init() {  
+    // do nothing  
+  }
+}
+</code></pre>
+
+<p>You will now move all of the server polling logic from <code>ActivityViewController</code> into this new class.</p>
+
+<p>Go to <strong>ActivityViewController.swift</strong>. Cut out everything from the <code>// MARK: Networking</code> section and paste it into <strong>PeriodicCheckForBids.swift</strong>.</p>
+
+<p>Remove <code>private dynamic</code> from the signature of the <code>refresh()</code> method. It needs to be usable from another object, which is why it can no longer be private. (You may not have seen <code>dynamic</code> before; that was only needed to connect the method to the <code>UIRefreshControl</code>.)</p>
+
+<p>From <strong>ActivityViewController.swift</strong>, also cut the declaration for the <code>timer</code> variable and paste it into <strong>PeriodicCheckForBids.swift</strong>.</p>
+
+<p>Xcode gives a number of errors because <code>PeriodicCheckForBids</code> does not know anything about <code>Watchlist</code> yet. You also need some kind of way to tell <code>ActivityViewController</code> that new bids have been received, so it can update its UI.</p>
+
+<p>Add the following to <strong>PeriodicCheckForBids.swift</strong>:</p>
+
+<pre><code>private var watchlist: Watchlist!
+
+typealias CompletionHandler = () -&gt; Void  
+private var completionHandler: CompletionHandler?
+
+func start(watchlist: Watchlist, completionHandler: CompletionHandler) {  
+  self.watchlist = watchlist  
+  self.completionHandler = completionHandler
+
+  NSRunLoop.currentRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)  
+}
+</code></pre>
+
+<p>This tells <code>PeriodicCheckForBids</code> all it needs to know. It now has a reference to the <code>Watchlist</code> object and a completion handler that it can call when there are new bids. The <code>start()</code> method also starts the 10-second interval timer.</p>
+
+<p>In <code>refresh()</code> there is still some UI code. Remove those lines with errors (the ones that refer to <code>tableView</code> and <code>refreshControl</code>).</p>
+
+<p>Finally, just before the line <code>self.request = nil</code>, add the following line:</p>
+
+<pre><code>self.completionHandler?()
+</code></pre>
+
+<p>This tells <code>ActivityViewController</code> that the operation is done and that the <code>Watchlist</code> has been updated with new bids.</p>
+
+<p>That&#8217;s it for <code>PeriodicCheckForBids</code>. Switch back to <strong>ActivityViewController.swift</strong>.</p>
+
+<p>Add a new instance variable:</p>
+
+<pre><code>private var periodicCheck = PeriodicCheckForBids()
+</code></pre>
+
+<p>In <code>viewDidLoad()</code>, remove the line that installs the timer, and add the following:</p>
+
+<pre><code>periodicCheck.start(watchlist) {  
+  self.bids = self.watchlist.allBids  
+  self.tableView.reloadData()  
+  self.refreshControl?.endRefreshing()  
+}
+</code></pre>
+
+<p>This tells <code>PeriodicCheckForBids</code> to start polling the server. The code in the completion handler reloads the table view.</p>
+
+<p>Finally, add the following code to the bottom of the class:</p>
+
+<pre><code>// MARK: User Interface Actions
+
+private dynamic func refresh() {  
+  if watchlist.items.count == 0 {  
+    refreshControl?.endRefreshing()  
+  } else {  
+    periodicCheck.refresh()  
+  }
+}
+</code></pre>
+
+<p>This is for the pull-to-refresh control. </p>
+
+<p>Great! Now you have a very clean <code>ActivityViewController</code>. All the logic for polling the server and looking for new bids sits in its own class. What remains in the view controller is just UI code.</p>
+
+<p>Build and run. Pull-to-refresh. Yikes, the app crashes inside <code>PeriodicCheckForBids</code> when it wants to send the <code>LatestBidsRequest</code> to the server. Can you figure out why?</p>
+
+<p>.</p>
+
+<p>.</p>
+
+<p>.</p>
+
+<p>.</p>
+
+<p>.</p>
+
+<p>Answer: you never passed the <code>ServerAPI</code> instance to <code>PeriodicCheckForBids</code>. This is a common oversight with dependency injection. You do need to make sure that you&#8217;re actually passing along these objects to whomever needs it.</p>
+
+<p>In <strong>ActivityViewController.swift</strong>, change the declaration of the <code>serverAPI</code> instance variable to:</p>
+
+<pre><code>var serverAPI: ServerAPI! {  
+  didSet {  
+    periodicCheck.serverAPI = serverAPI  
+  }
+}
+</code></pre>
+
+<p>This passes the <code>ServerAPI</code> object to <code>PeriodicCheckForBids</code> too. Build and run and now everything should work as before.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>What you’ve done here is cut out the networking code from <code>ActivityViewController</code> and split it up into two new parts: </p>
+
+<ol>
+<li>the actual networking request, <code>LatestBidRequest</code>.</li>
+<li>the <code>PeriodicCheckForBids</code> object that works in the background and notifies us every once in a while when there is new data.</li>
+</ol>
+
+<p>Each of these objects now has one specific and very clear task. With this approach your app ends up with more classes, but each of them does less and is therefore easier to debug and understand.</p>
+
+<p>If you have time, also take a look at <strong>SearchViewController.swift</strong>. Something similar was done there. All the logic for performing a search was moved into a new source file, <strong>Search.swift</strong>. This new <code>Search</code> class uses <code>SearchRequest</code> to talk to the server, and then returns a new array with the <code>Item</code> objects it found.</p>
+
+<p>Congratulations, you’re ready to continue on to the challenges, where you’ll strip down the view controllers even further.</p>
+<!-- ##END MARKED WRAPPER## -->
+    </div>
+</body>
+</html>
