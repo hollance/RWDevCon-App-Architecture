@@ -15,7 +15,7 @@ body{-webkit-font-smoothing:antialiased;font-family:"Helvetica Neue",Helvetica,A
 </style>
 
 </head>
-<body class="normal firstload">
+<body class="normal">
   <div id="wrapper">
       <h1 id="301:apparchitecturepart4:challengeinstructions">301: App Architecture, Part 4: Challenge Instructions</h1>
 
@@ -36,7 +36,7 @@ body{-webkit-font-smoothing:antialiased;font-family:"Helvetica Neue",Helvetica,A
 <p>We have two challenges for you:</p>
 
 <ol>
-<li><p>The persistence logic &#8211; loading and saving data &#8211; is mixed up with the domain model. You can extract this into a &#8220;persistence layer&#8221; (or &#8220;storage layer&#8221;).</p></li>
+<li><p>The persistence logic &#8211; loading and saving data &#8211; is mixed up with the domain model. You can extract this into a new &#8220;persistence layer&#8221; (also known as a &#8220;storage layer&#8221;).</p></li>
 <li><p>The view controllers have code for formatting model data into human-readable form. You can move this &#8220;presentation logic&#8221; out of the view controller into separate classes.</p></li>
 </ol>
 
@@ -44,7 +44,7 @@ body{-webkit-font-smoothing:antialiased;font-family:"Helvetica Neue",Helvetica,A
 
 <h2 id="challengea:persistencelayer">Challenge A: Persistence Layer</h2>
 
-<p>As you&#8217;ve heard many times in this talk, objects should ideally do one thing only. You have already moved a lot of the code out of the view controllers, but if you look at the domain model classes &#8211; <code>Watchlist</code>, <code>Item</code>, <code>Bid</code> &#8211; then you&#8217;ll notice that these objects actually do more than just model jobs. </p>
+<p>As you&#8217;ve heard many times in this talk, objects should ideally do one thing only. You have already moved a lot of the code out of the view controllers, but if you look at the domain model classes &#8211; <code>Watchlist</code>, <code>Item</code>, <code>Bid</code> &#8211; then you&#8217;ll notice that these objects actually do more than just domain jobs. </p>
 
 <p>For example, in <strong>Item.swift</strong>:</p>
 
@@ -114,7 +114,7 @@ activityViewController.dataStore = dataStore
 
 <p>Remove the <code>init(JSON)</code> method from <strong>Item.swift</strong> and <strong>Bid.swift</strong>.</p>
 
-<p>A simple way to keep the existing code working without any changes, is to add these methods as extensions on <code>Item</code> and <code>Bid</code> into a new file, <strong>JSONConversion.swift</strong>.</p>
+<p>A simple way to keep the existing code working without any changes, is to add these methods as <em>extensions</em> on <code>Item</code> and <code>Bid</code> into a new file, <strong>JSONConversion.swift</strong>.</p>
 
 <p>Now <code>init(JSON)</code> is no longer officially part of the domain model, but you can still use it to convert from JSON. Very convenient!</p>
 
@@ -140,7 +140,7 @@ activityViewController.dataStore = dataStore
 
 <p>Good luck!</p>
 
-<p>Extra hard bonus challenge: Convert the app to use Core Data instead of plists. However, <code>Item</code> and <code>Bid</code> may not extend from <code>NSManagedObject</code>, and the view controllers should not require any changes.</p>
+<p>Extra hard bonus challenge: Convert the app to use Core Data instead of plists. However, <code>Item</code> and <code>Bid</code> may not extend from <code>NSManagedObject</code>, and the view controllers should not require any changes (so you can&#8217;t give the view controllers an <code>NSManagedObjectContext</code> property).</p>
 
 <h2 id="challengeb:presentationlayer">Challenge B: Presentation Layer</h2>
 
@@ -152,23 +152,23 @@ activityViewController.dataStore = dataStore
 
 <h3 id="sortingtheitems">Sorting the items</h3>
 
-<p>Why does <strong>Watchlist.swift</strong> have a <code>sortItems()</code> method? After all, it doesn&#8217;t matter to the domain model what order the <code>Item</code>s are in&#8230;</p>
+<p>Why does the <code>sortItems()</code> method belong to <strong>Watchlist.swift</strong>? After all, it doesn&#8217;t matter to the domain model what order the <code>Item</code>s are in&#8230;</p>
 
-<p>The only reason why <code>Watchlist</code> does <code>sortItems()</code> is because we want to show the items sorted alphabetically in the table view. So we have a domain object that contains presentation logic. Naughty!</p>
+<p>Of course, we sort the items so that we can list them alphabetically in the table view. But now we have a domain object that contains presentation logic. Naughty!</p>
 
-<p>It doesn&#8217;t sound too harmful, surely &#8211; why shouldn’t <code>Watchlist</code> sort the items? Well, imagine that this same array of items is displayed in two different view controllers, but each wants to sort the list in a different way. Then you have a problem&#8230;</p>
+<p>It doesn&#8217;t sound too harmful, surely &#8211; why shouldn’t <code>Watchlist</code> sort the items? Imagine that this same array of items is displayed in two different view controllers, but each wants to sort the list in a different way. Then you have a problem&#8230;</p>
 
-<p>A domain object should only sort things if that makes sense for the domain logic. But when it comes to drawing things on the screen, that is not the domain’s responsibility.</p>
+<p>A domain object should only sort if that makes sense for the domain logic. But when it comes to drawing things on the screen, that is not the domain’s responsibility.</p>
 
 <p>Remove <code>sortItems()</code> from <strong>Watchlist.swift</strong>.</p>
 
 <p>This method is still being called from <strong>ItemDetailViewController.swift</strong>; also remove those lines.</p>
 
+<p>Where should you sort the array now? If you&#8217;re not allowed to sort the list of items from <code>Watchlist</code>, then the only solution is to make a copy of that list and sort that copy.</p>
+
 <figure>
 <img src="Images/Presentation.png" alt="" />
 </figure>
-
-<p>If you&#8217;re not allowed to sort the list of items from <code>Watchlist</code>, then the only solution is to make a copy of that list and sort that copy.</p>
 
 <p>I&#8217;ve already added a special helper class for this to the project: <strong>ListOfItems.swift</strong>.</p>
 
@@ -192,7 +192,7 @@ activityViewController.dataStore = dataStore
 
 <h3 id="asmalltasteofmvvm">A small taste of MVVM</h3>
 
-<p>MVVM, or Model-View-ViewModel, is an alternative for MVC. The difference is that you don&#8217;t put a controller between the model and the view, but a &#8211; confusingly named &#8211; view model.</p>
+<p>MVVM, or Model-View-ViewModel, is an alternative for MVC. The difference is that you don&#8217;t put a controller between the model and the view, but a so-called <em>view model</em> (yes, the name is very confusing).</p>
 
 <figure>
 <img src="Images/ViewModel.png" alt="" />
@@ -200,7 +200,7 @@ activityViewController.dataStore = dataStore
 
 <p>A view model is a data model for the view. Whereas the domain model describes the core functionality of the app, the view model describes the contents (and behavior) of the user interface.</p>
 
-<p>The reason for using a view model instead of a controller, is that view models are easier to unit test (you don&#8217;t need to load your entire UI), and you can often re-use them across different screens.</p>
+<p>The reason for using a view model instead of a controller, is that view models are easier to unit test &#8211; you don&#8217;t need to load your entire UI &#8211; and you can often re-use them across different screens.</p>
 
 <p>You&#8217;re now going to make a simple view model for the presentation logic from <strong>WatchViewController.swift</strong>. </p>
 
@@ -233,9 +233,7 @@ activityViewController.dataStore = dataStore
 
 <p>This should look familiar; it contains the logic from <code>tableView(cellForRowAtIndexPath)</code>.</p>
 
-<p><code>PresentationItem</code> is the view model for an <code>Item</code> displayed on the screen.</p>
-
-<p>(To unit test the presentation logic for this screen, all you need is <code>ListOfItems</code> and <code>PresentationItem</code>. If the values of the strings inside <code>PresentationItem</code> are correct, then you can be fairly sure the UI is correct too. There is no need to unit test the actual view controller or the table view cells.)</p>
+<p><code>PresentationItem</code> is the view model for an <code>Item</code> displayed on the screen. It contains the data from <code>Item</code> but made human-readable.</p>
 
 <p>You still need to add the code for <code>currencyFormatter</code> to this file (see <strong>WatchViewController.swift</strong>). </p>
 
@@ -243,9 +241,13 @@ activityViewController.dataStore = dataStore
 
 <p>Do the same for <strong>SearchViewController.swift</strong>.</p>
 
-<p>Tip: You can give <strong>ItemCell.swift</strong> a <code>configureForPresentationItem()</code> function that takes the strings from a <code>PresentationItem</code> object and places them into the cell&#8217;s text labels.</p>
+<p>Tip: You can give <strong>ItemCell.swift</strong> a <code>configureForPresentationItem()</code> method that takes the strings from a <code>PresentationItem</code> object and places them into the cell&#8217;s text labels.</p>
 
 <p>Good luck!</p>
+
+<blockquote>
+<p><strong>Note:</strong> If you wanted to unit test the presentation logic for this screen, all you&#8217;d need is <code>ListOfItems</code> and <code>PresentationItem</code>. If the values of the strings inside <code>PresentationItem</code> are correct, then you can be sure the UI is correct too. There is no need to unit test the actual view controller or the table view cells.</p>
+</blockquote>
 <!-- ##END MARKED WRAPPER## -->
     </div>
 </body>

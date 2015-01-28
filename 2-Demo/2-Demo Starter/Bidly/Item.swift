@@ -31,6 +31,7 @@ class Item: NSObject, NSCoding, Equatable {
   func addBid(bid: Bid) {
     if find(bids, bid) == nil {
       bids.append(bid)
+      bid.item = self  // two-way relationship
     }
   }
 
@@ -62,6 +63,11 @@ class Item: NSObject, NSCoding, Equatable {
     imageURL = aDecoder.decodeObjectForKey("imageURL") as NSString
     bids = aDecoder.decodeObjectForKey("bids") as [Bid]
     super.init()
+
+    // Reconnect the bids with this item object.
+    for bid in bids {
+      bid.item = self
+    }
   }
 
   func encodeWithCoder(aCoder: NSCoder) {

@@ -15,7 +15,7 @@ body{-webkit-font-smoothing:antialiased;font-family:"Helvetica Neue",Helvetica,A
 </style>
 
 </head>
-<body class="normal firstload">
+<body class="normal">
   <div id="wrapper">
       <h1 id="301:apparchitecturepart3:labinstructions">301: App Architecture, Part 3: Lab Instructions</h1>
 
@@ -35,7 +35,7 @@ body{-webkit-font-smoothing:antialiased;font-family:"Helvetica Neue",Helvetica,A
 
 <p>Moving the networking code into its own layer has a big advantage: you can now change the networking logic without requiring any changes to the view controllers. Again, this is <em>decoupling</em> in action.</p>
 
-<p>For example, right now each view controller uses <code>NSURLSession.sharedSession()</code>. What if you want to use an <code>NSURLSession</code> with a custom configuration? Without a networking layer, you&#8217;d have to change this across all the view controllers, rather than in one single place.</p>
+<p>For example, right now each view controller uses <code>NSURLSession.sharedSession()</code>. What if you want to use an <code>NSURLSession</code> with a custom configuration instead? Without a networking layer, you&#8217;d have to change this across all the view controllers, rather than in one single place.</p>
 
 <p>The networking layer for Bidly looks like this:</p>
 
@@ -56,7 +56,7 @@ body{-webkit-font-smoothing:antialiased;font-family:"Helvetica Neue",Helvetica,A
 
 <p>It makes sense to wrap up each request into an object of its own, so you can pass them around, store them, queue them up, and so on.</p>
 
-<p>These request objects send the HTTP requests to the server, handle the incoming data, and then notify the app about the results. The rest of the app doesn&#8217;t need to worry about <code>NSURLSession</code>, HTTP, parsing JSON, cookies, caching, encryption, and so on. </p>
+<p>These request objects send the HTTP requests to the server, handle the incoming data, and notify the app about the results. The rest of the app doesn&#8217;t need to worry about <code>NSURLSession</code>, HTTP, parsing JSON, cookies, caching, encryption, and so on. </p>
 
 <p>If this were a real app, <code>ServerAPI</code> would also handle authentication and the login screen.</p>
 
@@ -95,14 +95,14 @@ body{-webkit-font-smoothing:antialiased;font-family:"Helvetica Neue",Helvetica,A
 
 <p>(The other view controllers already have this property.)</p>
 
-<p>The <code>ServerAPI</code> instance is created in <strong>AppDelegate.swift</strong> and given to all the view controllers that need it. Add the following line to <code>didFinishLaunchingWithOptions</code>:</p>
+<p>The <code>ServerAPI</code> instance is created in <strong>AppDelegate.swift</strong> and given to all the view controllers that need it. Add the following line to <code>application(didFinishLaunchingWithOptions)</code>:</p>
 
 <pre><code>activityViewController.serverAPI = serverAPI
 </code></pre>
 
-<p>The <code>ActivityViewController</code> also needs to pass this object to the <code>ItemDetailViewController</code>. When the user taps a row in the table view, the <code>ActivityViewController</code> will segue to the Item Detail screen. </p>
+<p>Now <code>ActivityViewController</code> can use this <code>ServerAPI</code> object to send requests to the Bidly server.</p>
 
-<p>The <code>ItemDetailViewController</code> itself does not use the <code>ServerAPI</code> object. However, the Item Detail screen in turn can segue to <code>NewBidViewController</code>, which <em>does</em> require <code>ServerAPI</code>.</p>
+<p>When the user taps a row in the table view, the app will segue to the Item Detail screen. The <code>ItemDetailViewController</code> itself does not use the <code>ServerAPI</code> object for anything. However, it in turn can segue to <code>NewBidViewController</code>, which <em>does</em> require <code>ServerAPI</code>.</p>
 
 <figure>
 <img src="Images/DependencyInjection.png" alt="" />
@@ -126,7 +126,7 @@ body{-webkit-font-smoothing:antialiased;font-family:"Helvetica Neue",Helvetica,A
 <pre><code>private var request: LatestBidsRequest?
 </code></pre>
 
-<p>In <code>refresh()</code>, remove everything from the line <code>dataTask?.cancel()</code> to the end of the method, and replace it by the following:</p>
+<p>In <code>refresh()</code>, remove everything from the line <code>dataTask?.cancel()</code> to the end of the method, and replace it with the following:</p>
 
 <pre><code>request?.cancel()
 
@@ -169,9 +169,7 @@ serverAPI.sendRequest(request!)
 
 <p><code>LatestBidRequest</code> performs the request on the server, parses the JSON results, and returns an array of <code>JSONDictionary</code> objects.</p>
 
-<p>It is still up to the view controller to turn this in to <code>Bid</code> objects and add them to the <code>Watchlist</code>. In other words, the networking layer is independent of the domain layer. It doesn&#8217;t know anything about <code>Bid</code>, <code>Item</code>, or <code>Watchlist</code>. It just does networking stuff.</p>
-
-<p>Of course, <code>LatestBidRequest</code> also does not touch the UI. Any UI updates such as reloading the table view are still the responsibility of the view controller.</p>
+<p>It is still up to the view controller to turn this in to <code>Bid</code> objects and add them to the <code>Watchlist</code>. This keeps the networking layer independent of the domain layer. It doesn&#8217;t know anything about <code>Bid</code>, <code>Item</code>, or <code>Watchlist</code>. It just does networking stuff. Likewise, any UI updates such as reloading the table view are still the responsibility of the view controller.</p>
 
 <p>To complete these changes, do the following:</p>
 
@@ -180,7 +178,7 @@ serverAPI.sendRequest(request!)
 <li><p>Remove the <code>parseJSON()</code> method. Parsing the JSON data is now done by <code>LatestBidRequest</code>.</p></li>
 </ul>
 
-<p>Build and run, and pull-to-refresh to make sure the Activity screen still works.</p>
+<p>Build and run. Try a pull-to-refresh to make sure the Activity screen still works.</p>
 
 <h2 id="periodiccheckforbids">PeriodicCheckForBids</h2>
 
@@ -190,7 +188,9 @@ serverAPI.sendRequest(request!)
 
 <p>Add a new Swift file to the project, <strong>PeriodicCheckForBids.swift</strong>. Put it inside the <strong>View the latest bids</strong> group.</p>
 
-<p>(Note: This new class isn’t really part of the networking code, even though it uses the <code>ServerAPI</code>, nor is it part of the domain model, even though it uses the <code>Watchlist</code> and <code>Bid</code> classes. It sits somewhere in between, creating the logic that is specific to this particular app. This is commonly called the &#8220;Application Layer&#8221;.)</p>
+<blockquote>
+<p><strong>Note:</strong> This new class isn’t really part of the networking code, even though it uses the <code>ServerAPI</code>. Nor is it part of the domain model, even though it uses the <code>Watchlist</code> and <code>Bid</code> classes. It sits somewhere in between, creating the logic that is specific to this particular app. This is commonly called the &#8220;Application Layer&#8221;.</p>
+</blockquote>
 
 <p>Add the following code into this new file:</p>
 
@@ -207,7 +207,7 @@ serverAPI.sendRequest(request!)
 
 <p>Go to <strong>ActivityViewController.swift</strong>. Cut out everything from the <code>// MARK: Networking</code> section and paste it into <strong>PeriodicCheckForBids.swift</strong>.</p>
 
-<p>Remove <code>private dynamic</code> from the signature of the <code>refresh()</code> method. It needs to be usable from another object, which is why it can no longer be private. (You may not have seen <code>dynamic</code> before; that was only needed to connect the method to the <code>UIRefreshControl</code>.)</p>
+<p>Remove <code>private dynamic</code> from the signature of the <code>refresh()</code> method. It needs to be usable from another object, which is why it can no longer be private; <code>dynamic</code> was only needed to connect the method to the <code>UIRefreshControl</code>.</p>
 
 <p>From <strong>ActivityViewController.swift</strong>, also cut the declaration for the <code>timer</code> variable and paste it into <strong>PeriodicCheckForBids.swift</strong>.</p>
 
@@ -286,7 +286,7 @@ private dynamic func refresh() {
 
 <p>.</p>
 
-<p>Answer: you never passed the <code>ServerAPI</code> instance to <code>PeriodicCheckForBids</code>. This is a common oversight with dependency injection. You do need to make sure that you&#8217;re actually passing along these objects to whomever needs it.</p>
+<p>Answer: You never passed the <code>ServerAPI</code> instance to <code>PeriodicCheckForBids</code>. This is a common oversight with dependency injection. You do need to make sure that you&#8217;re actually passing along these objects to whomever needs it!</p>
 
 <p>In <strong>ActivityViewController.swift</strong>, change the declaration of the <code>serverAPI</code> instance variable to:</p>
 
@@ -297,7 +297,7 @@ private dynamic func refresh() {
 }
 </code></pre>
 
-<p>This passes the <code>ServerAPI</code> object to <code>PeriodicCheckForBids</code> too. Build and run and now everything should work as before.</p>
+<p>This gives the <code>ServerAPI</code> object to <code>PeriodicCheckForBids</code> too. Build and run and now everything should work as before.</p>
 
 <h2 id="conclusion">Conclusion</h2>
 
@@ -310,7 +310,7 @@ private dynamic func refresh() {
 
 <p>Each of these objects now has one specific and very clear task. With this approach your app ends up with more classes, but each of them does less and is therefore easier to debug and understand.</p>
 
-<p>If you have time, also take a look at <strong>SearchViewController.swift</strong>. Something similar was done there. All the logic for performing a search was moved into a new source file, <strong>Search.swift</strong>. This new <code>Search</code> class uses <code>SearchRequest</code> to talk to the server, and then returns a new array with the <code>Item</code> objects it found.</p>
+<p>If you have time, also take a look at <strong>SearchViewController.swift</strong>. Something similar was done there: all the logic for performing a search was moved into a new source file, <strong>Search.swift</strong>. This new <code>Search</code> class uses <code>SearchRequest</code> to talk to the server, and then returns a new array with the <code>Item</code> objects it found.</p>
 
 <p>Congratulations, you’re ready to continue on to the challenges, where you’ll strip down the view controllers even further.</p>
 <!-- ##END MARKED WRAPPER## -->

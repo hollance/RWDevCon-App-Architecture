@@ -8,9 +8,7 @@ private let jsonDateFormatter: NSDateFormatter = {
 }()
 
 class Bid: NSObject, NSCoding, Equatable {
-  // These are optional because the server doesn't always send these fields.
-  var itemID: Int?
-  var itemName: String?
+  weak var item: Item!
 
   let bidID: Int
   let bidderID: Int
@@ -19,9 +17,6 @@ class Bid: NSObject, NSCoding, Equatable {
   let timestamp: NSDate
 
   init(JSON dict: JSONDictionary) {
-    itemID = dict["itemID"] as Int?
-    itemName = dict["itemName"] as NSString?
-
     bidID = dict["bidID"] as Int
     bidderID = dict["bidderID"] as Int
     bidderName = dict["bidderName"] as NSString
@@ -36,9 +31,6 @@ class Bid: NSObject, NSCoding, Equatable {
   // MARK: Persistence
 
   required init(coder aDecoder: NSCoder) {
-    itemID = aDecoder.decodeIntegerForKey("itemID") as Int?
-    itemName = aDecoder.decodeObjectForKey("itemName") as NSString?
-
     bidID = aDecoder.decodeIntegerForKey("bidID")
     bidderID = aDecoder.decodeIntegerForKey("bidderID")
     bidderName = aDecoder.decodeObjectForKey("bidderName") as NSString
@@ -48,13 +40,6 @@ class Bid: NSObject, NSCoding, Equatable {
   }
 
   func encodeWithCoder(aCoder: NSCoder) {
-    if let itemID = itemID {
-      aCoder.encodeInteger(itemID, forKey: "itemID")
-    }
-    if let itemName = itemName {
-      aCoder.encodeObject(itemName, forKey: "itemName")
-    }
-
     aCoder.encodeInteger(bidID, forKey: "bidID")
     aCoder.encodeInteger(bidderID, forKey: "bidderID")
     aCoder.encodeObject(bidderName, forKey: "bidderName")

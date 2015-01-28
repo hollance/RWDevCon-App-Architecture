@@ -6,32 +6,7 @@ The steps will be explained in the demo, but here are the raw steps in case you 
 
 IMPORTANT: Use the **2-Demo Starter** project to perform these steps.
 
-## 1) Connect the Bids to their Items
-
-In **Bid.swift**, remove the `itemID` and `itemName` instance variables.
-
-In their place, add a new instance variable:
-
-	weak var item: Item!
-
-In `init(JSON)`, remove the lines that use the old `itemID` and `itemName` variables.
-
-Also do this in `init(coder)` and `encodeWithCoder()`.
-
-In **Item.swift**, add the following line to `addBid()`:
-
-    bid.item = self  // two-way relationship
-
-In `init(coder)`, add the following after the call to `super`:
-
-    // Reconnect the bids with this item object.
-    for bid in bids {
-      bid.item = self
-    }
-
-Now new `Bid` objects are always connected to their `Item`s.
-
-## 2) Item Detail View Controller
+## 1) Item Detail View Controller
 
 Add a new instance variable to **ItemDetailViewController.swift**:
 
@@ -64,7 +39,7 @@ Remove the instance variables that refer to the other view controllers (these ar
 	var searchViewController: SearchViewController!
 	var WatchViewController: WatchViewController!
 
-## 3) Watch View Controller
+## 2) Watch View Controller
 
 In **WatchViewController.swift**, remove these instance variables:
 
@@ -108,7 +83,7 @@ In **Watchlist.swift**, call `loadWatchlist()` from the `init()` method.
 
 Cut the `sortItems()` method out of **WatchViewController.swift** and paste it into **Watchlist.swift**.
 
-## 4) Observing
+## 3) Observing
 
 In **Watchlist.swift**, uncomment the following code in `addBid()`:
 
@@ -127,7 +102,7 @@ In `viewDidLoad()`, add the following code:
 
 At the bottom of the file, uncomment the code from the `// MARK: Observing the Data Model` section.
 
-## 5) Other business logic
+## 4) Other business logic
 
 In **Item.swift**, uncomment the code for the `highestBidAmount` property.
 
@@ -148,7 +123,7 @@ Replace the line that sets `cell.highestBidLabel.text` with:
 
 Do the same in **SearchViewController.swift**.
 
-## 6) That's it!
+## 5) That's it!
 
 Congrats, you moved logic that really belongs to the domain model out of the view controller and into the `Watchlist` object.
 

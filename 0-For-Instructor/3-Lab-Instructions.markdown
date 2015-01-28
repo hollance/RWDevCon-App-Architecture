@@ -14,7 +14,7 @@ The responsibilities of an app can be divided into different layers. Each layer 
 
 Moving the networking code into its own layer has a big advantage: you can now change the networking logic without requiring any changes to the view controllers. Again, this is *decoupling* in action.
 
-For example, right now each view controller uses `NSURLSession.sharedSession()`. What if you want to use an `NSURLSession` with a custom configuration? Without a networking layer, you'd have to change this across all the view controllers, rather than in one single place.
+For example, right now each view controller uses `NSURLSession.sharedSession()`. What if you want to use an `NSURLSession` with a custom configuration instead? Without a networking layer, you'd have to change this across all the view controllers, rather than in one single place.
 
 The networking layer for Bidly looks like this:
 
@@ -31,7 +31,7 @@ Each different networking request gets its own class. The networking requests th
 
 It makes sense to wrap up each request into an object of its own, so you can pass them around, store them, queue them up, and so on.
 
-These request objects send the HTTP requests to the server, handle the incoming data, and then notify the app about the results. The rest of the app doesn't need to worry about `NSURLSession`, HTTP, parsing JSON, cookies, caching, encryption, and so on. 
+These request objects send the HTTP requests to the server, handle the incoming data, and notify the app about the results. The rest of the app doesn't need to worry about `NSURLSession`, HTTP, parsing JSON, cookies, caching, encryption, and so on. 
 
 If this were a real app, `ServerAPI` would also handle authentication and the login screen.
 
@@ -65,13 +65,13 @@ Add the following property to **ActivityViewController.swift**:
 
 (The other view controllers already have this property.)
 
-The `ServerAPI` instance is created in **AppDelegate.swift** and given to all the view controllers that need it. Add the following line to `didFinishLaunchingWithOptions`:
+The `ServerAPI` instance is created in **AppDelegate.swift** and given to all the view controllers that need it. Add the following line to `application(didFinishLaunchingWithOptions)`:
 
 	activityViewController.serverAPI = serverAPI
 
-The `ActivityViewController` also needs to pass this object to the `ItemDetailViewController`. When the user taps a row in the table view, the `ActivityViewController` will segue to the Item Detail screen. 
+Now `ActivityViewController` can use this `ServerAPI` object to send requests to the Bidly server.
 
-The `ItemDetailViewController` itself does not use the `ServerAPI` object. However, the Item Detail screen in turn can segue to `NewBidViewController`, which *does* require `ServerAPI`.
+When the user taps a row in the table view, the app will segue to the Item Detail screen. The `ItemDetailViewController` itself does not use the `ServerAPI` object for anything. However, it in turn can segue to `NewBidViewController`, which *does* require `ServerAPI`.
 
 ![](Images/DependencyInjection.png)
 
@@ -91,7 +91,7 @@ In **ActivityViewController.swift** replace the `dataTask` property with:
 
 	private var request: LatestBidsRequest?
 
-In `refresh()`, remove everything from the line `dataTask?.cancel()` to the end of the method, and replace it by the following:
+In `refresh()`, remove everything from the line `dataTask?.cancel()` to the end of the method, and replace it with the following:
 
     request?.cancel()
 
@@ -131,9 +131,7 @@ You no longer have to worry about all these things:
 
 `LatestBidRequest` performs the request on the server, parses the JSON results, and returns an array of `JSONDictionary` objects.
 
-It is still up to the view controller to turn this in to `Bid` objects and add them to the `Watchlist`. In other words, the networking layer is independent of the domain layer. It doesn't know anything about `Bid`, `Item`, or `Watchlist`. It just does networking stuff.
-
-Of course, `LatestBidRequest` also does not touch the UI. Any UI updates such as reloading the table view are still the responsibility of the view controller.
+It is still up to the view controller to turn this in to `Bid` objects and add them to the `Watchlist`. This keeps the networking layer independent of the domain layer. It doesn't know anything about `Bid`, `Item`, or `Watchlist`. It just does networking stuff. Likewise, any UI updates such as reloading the table view are still the responsibility of the view controller.
 
 To complete these changes, do the following:
 
@@ -141,7 +139,7 @@ To complete these changes, do the following:
 
 - Remove the `parseJSON()` method. Parsing the JSON data is now done by `LatestBidRequest`.
 
-Build and run, and pull-to-refresh to make sure the Activity screen still works.
+Build and run. Try a pull-to-refresh to make sure the Activity screen still works.
 
 ## PeriodicCheckForBids
 
@@ -151,7 +149,7 @@ Is it really the view controller's responsibility to periodically check the serv
   
 Add a new Swift file to the project, **PeriodicCheckForBids.swift**. Put it inside the **View the latest bids** group.
 
-(Note: This new class isn’t really part of the networking code, even though it uses the `ServerAPI`, nor is it part of the domain model, even though it uses the `Watchlist` and `Bid` classes. It sits somewhere in between, creating the logic that is specific to this particular app. This is commonly called the "Application Layer".)
+> **Note:** This new class isn’t really part of the networking code, even though it uses the `ServerAPI`. Nor is it part of the domain model, even though it uses the `Watchlist` and `Bid` classes. It sits somewhere in between, creating the logic that is specific to this particular app. This is commonly called the "Application Layer".
 
 Add the following code into this new file:
 
@@ -167,7 +165,7 @@ You will now move all of the server polling logic from `ActivityViewController` 
 
 Go to **ActivityViewController.swift**. Cut out everything from the `// MARK: Networking` section and paste it into **PeriodicCheckForBids.swift**.
 
-Remove `private dynamic` from the signature of the `refresh()` method. It needs to be usable from another object, which is why it can no longer be private. (You may not have seen `dynamic` before; that was only needed to connect the method to the `UIRefreshControl`.)
+Remove `private dynamic` from the signature of the `refresh()` method. It needs to be usable from another object, which is why it can no longer be private; `dynamic` was only needed to connect the method to the `UIRefreshControl`.
 
 From **ActivityViewController.swift**, also cut the declaration for the `timer` variable and paste it into **PeriodicCheckForBids.swift**.
 
@@ -241,7 +239,7 @@ Build and run. Pull-to-refresh. Yikes, the app crashes inside `PeriodicCheckForB
 
 .
 
-Answer: you never passed the `ServerAPI` instance to `PeriodicCheckForBids`. This is a common oversight with dependency injection. You do need to make sure that you're actually passing along these objects to whomever needs it.
+Answer: You never passed the `ServerAPI` instance to `PeriodicCheckForBids`. This is a common oversight with dependency injection. You do need to make sure that you're actually passing along these objects to whomever needs it!
 
 In **ActivityViewController.swift**, change the declaration of the `serverAPI` instance variable to:
 
@@ -251,7 +249,7 @@ In **ActivityViewController.swift**, change the declaration of the `serverAPI` i
 	  }
 	}
 
-This passes the `ServerAPI` object to `PeriodicCheckForBids` too. Build and run and now everything should work as before.
+This gives the `ServerAPI` object to `PeriodicCheckForBids` too. Build and run and now everything should work as before.
 
 ## Conclusion
 
@@ -262,6 +260,6 @@ What you’ve done here is cut out the networking code from `ActivityViewControl
 
 Each of these objects now has one specific and very clear task. With this approach your app ends up with more classes, but each of them does less and is therefore easier to debug and understand.
 
-If you have time, also take a look at **SearchViewController.swift**. Something similar was done there. All the logic for performing a search was moved into a new source file, **Search.swift**. This new `Search` class uses `SearchRequest` to talk to the server, and then returns a new array with the `Item` objects it found.
+If you have time, also take a look at **SearchViewController.swift**. Something similar was done there: all the logic for performing a search was moved into a new source file, **Search.swift**. This new `Search` class uses `SearchRequest` to talk to the server, and then returns a new array with the `Item` objects it found.
 
 Congratulations, you’re ready to continue on to the challenges, where you’ll strip down the view controllers even further.

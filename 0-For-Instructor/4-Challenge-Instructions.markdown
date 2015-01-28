@@ -12,7 +12,7 @@ But if you look at the full architecture diagram, there is still more you can do
 
 We have two challenges for you:
 
-1. The persistence logic -- loading and saving data -- is mixed up with the domain model. You can extract this into a "persistence layer" (or "storage layer").
+1. The persistence logic -- loading and saving data -- is mixed up with the domain model. You can extract this into a new "persistence layer" (also known as a "storage layer").
 
 2. The view controllers have code for formatting model data into human-readable form. You can move this "presentation logic" out of the view controller into separate classes.
 
@@ -20,7 +20,7 @@ You probably won't have time to do both, so pick the challenge you think is most
 
 ## Challenge A: Persistence Layer
 
-As you've heard many times in this talk, objects should ideally do one thing only. You have already moved a lot of the code out of the view controllers, but if you look at the domain model classes -- `Watchlist`, `Item`, `Bid` -- then you'll notice that these objects actually do more than just model jobs. 
+As you've heard many times in this talk, objects should ideally do one thing only. You have already moved a lot of the code out of the view controllers, but if you look at the domain model classes -- `Watchlist`, `Item`, `Bid` -- then you'll notice that these objects actually do more than just domain jobs. 
 
 For example, in **Item.swift**:
 
@@ -80,7 +80,7 @@ Instead, you'll add the conversion logic in between these two:
 
 Remove the `init(JSON)` method from **Item.swift** and **Bid.swift**.
 
-A simple way to keep the existing code working without any changes, is to add these methods as extensions on `Item` and `Bid` into a new file, **JSONConversion.swift**.
+A simple way to keep the existing code working without any changes, is to add these methods as *extensions* on `Item` and `Bid` into a new file, **JSONConversion.swift**.
 
 Now `init(JSON)` is no longer officially part of the domain model, but you can still use it to convert from JSON. Very convenient!
 
@@ -104,7 +104,7 @@ Tip: One way to do this is to use temporary objects that exist just for loading 
 
 Good luck!
 
-Extra hard bonus challenge: Convert the app to use Core Data instead of plists. However, `Item` and `Bid` may not extend from `NSManagedObject`, and the view controllers should not require any changes.
+Extra hard bonus challenge: Convert the app to use Core Data instead of plists. However, `Item` and `Bid` may not extend from `NSManagedObject`, and the view controllers should not require any changes (so you can't give the view controllers an `NSManagedObjectContext` property).
 
 ## Challenge B: Presentation Layer
 
@@ -116,21 +116,21 @@ IMPORTANT: For this challenge, use the project from the **4-Challenge B Starter*
 
 ### Sorting the items
 
-Why does **Watchlist.swift** have a `sortItems()` method? After all, it doesn't matter to the domain model what order the `Item`s are in...
+Why does the `sortItems()` method belong to **Watchlist.swift**? After all, it doesn't matter to the domain model what order the `Item`s are in...
 
-The only reason why `Watchlist` does `sortItems()` is because we want to show the items sorted alphabetically in the table view. So we have a domain object that contains presentation logic. Naughty!
+Of course, we sort the items so that we can list them alphabetically in the table view. But now we have a domain object that contains presentation logic. Naughty!
 
-It doesn't sound too harmful, surely -- why shouldn’t `Watchlist` sort the items? Well, imagine that this same array of items is displayed in two different view controllers, but each wants to sort the list in a different way. Then you have a problem...
+It doesn't sound too harmful, surely -- why shouldn’t `Watchlist` sort the items? Imagine that this same array of items is displayed in two different view controllers, but each wants to sort the list in a different way. Then you have a problem...
 
-A domain object should only sort things if that makes sense for the domain logic. But when it comes to drawing things on the screen, that is not the domain’s responsibility.
+A domain object should only sort if that makes sense for the domain logic. But when it comes to drawing things on the screen, that is not the domain’s responsibility.
 
 Remove `sortItems()` from **Watchlist.swift**.
 
 This method is still being called from **ItemDetailViewController.swift**; also remove those lines.
 
-![](Images/Presentation.png)
+Where should you sort the array now? If you're not allowed to sort the list of items from `Watchlist`, then the only solution is to make a copy of that list and sort that copy.
 
-If you're not allowed to sort the list of items from `Watchlist`, then the only solution is to make a copy of that list and sort that copy.
+![](Images/Presentation.png)
 
 I've already added a special helper class for this to the project: **ListOfItems.swift**.
 
@@ -152,13 +152,13 @@ Tip: Because `Watchlist` is now unsorted and `ListOfItems` *is* sorted, you have
 
 ### A small taste of MVVM
 
-MVVM, or Model-View-ViewModel, is an alternative for MVC. The difference is that you don't put a controller between the model and the view, but a -- confusingly named -- view model.
+MVVM, or Model-View-ViewModel, is an alternative for MVC. The difference is that you don't put a controller between the model and the view, but a so-called *view model* (yes, the name is very confusing).
 
 ![](Images/ViewModel.png)
 
 A view model is a data model for the view. Whereas the domain model describes the core functionality of the app, the view model describes the contents (and behavior) of the user interface.
 
-The reason for using a view model instead of a controller, is that view models are easier to unit test (you don't need to load your entire UI), and you can often re-use them across different screens.
+The reason for using a view model instead of a controller, is that view models are easier to unit test -- you don't need to load your entire UI -- and you can often re-use them across different screens.
 
 You're now going to make a simple view model for the presentation logic from **WatchViewController.swift**. 
 
@@ -190,9 +190,7 @@ Add a new file to the project, named **PresentationItem.swift**. Add the followi
 
 This should look familiar; it contains the logic from `tableView(cellForRowAtIndexPath)`.
 
-`PresentationItem` is the view model for an `Item` displayed on the screen.
-
-(To unit test the presentation logic for this screen, all you need is `ListOfItems` and `PresentationItem`. If the values of the strings inside `PresentationItem` are correct, then you can be fairly sure the UI is correct too. There is no need to unit test the actual view controller or the table view cells.)
+`PresentationItem` is the view model for an `Item` displayed on the screen. It contains the data from `Item` but made human-readable.
 
 You still need to add the code for `currencyFormatter` to this file (see **WatchViewController.swift**). 
 
@@ -200,6 +198,8 @@ Your job is to make `WatchViewController.swift` use this new `PresentationItem` 
 
 Do the same for **SearchViewController.swift**.
 
-Tip: You can give **ItemCell.swift** a `configureForPresentationItem()` function that takes the strings from a `PresentationItem` object and places them into the cell's text labels.
+Tip: You can give **ItemCell.swift** a `configureForPresentationItem()` method that takes the strings from a `PresentationItem` object and places them into the cell's text labels.
 
 Good luck!
+
+> **Note:** If you wanted to unit test the presentation logic for this screen, all you'd need is `ListOfItems` and `PresentationItem`. If the values of the strings inside `PresentationItem` are correct, then you can be sure the UI is correct too. There is no need to unit test the actual view controller or the table view cells.
