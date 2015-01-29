@@ -163,9 +163,11 @@ Every view controller that needs to use the Watchlist object gets one of those v
 
 > Slide: 07 - Dependency Injection
 
-I resisted the temptation to make Watchlist a singleton, because singletons have a number of important downsides. In particular, they create a new dependency between the singleton and the object that uses it, while we're trying to *reduce* dependencies.
+I know singletons are popular, but I resisted the temptation to make Watchlist a singleton, because they have a lot of downsides.
 
-With dependency injection, the link between the view controller and a particular Watchlist object doesn't exist until you actually run the app.
+I don't have the time to discuss this in a lot of detail, but with dependency injection what happens is that you *give* the object to each view controller that needs it. The view controllers don't have to go looking for it.
+
+If this were a singleton, then view controllers would depend on that object existing somewhere, and this as the word implies, this *increases* the dependencies between your objects.
 
 > Show this in the app, from Search screen
 
@@ -269,14 +271,9 @@ The load and save methods still want to use the old items array. The solution is
 
 Cut the entire `// MARK: Persistence` section out of `WatchViewController` and paste it into **Watchlist.swift**.
 
-Back in **WatchViewController.swift**, in `tableView(commitEditingStyle, forRowAtIndexPath)`, the code still tries to call the old `saveWatchlist()` method. Change this to:
+Call `loadWatchlist()` from the `init()` method, so that the file gets loaded when Watchlist is constructed.
 
-	watchlist.removeAtIndex(indexPath.row)
-	watchlist.saveWatchlist()
-
-We can also remove `init(coder)`, because it just existed to call `loadWatchlist()`.
-
-If we're not loading the watchlist file here, then what is a good place? I think it makes most sense to load the plist file when the Watchlist object is first created. That happens in AppDelegate when the app starts up, in `didFinishLaunchingWithOptions`. 
+Where does the Watchlist get created anyway? That happens in AppDelegate when the app starts up, in `didFinishLaunchingWithOptions`. 
 
 > AppDelegate.swift
 
@@ -288,21 +285,26 @@ While we're here, we also need to give this Watchlist object to our view control
 
 Also remove the lines with the errors. And now the Watchlist model object is also shared with this view controller.
 
-> Watchlist.swift
+> WatchViewController.swift
 
-We're not quite done yet. In **Watchlist.swift**, call `loadWatchlist()` from the `init()` method, so that the file gets loaded when Watchlist is constructed.
+Back in **WatchViewController.swift**, also remove `init(coder)`, because it just existed to call `loadWatchlist()`, which no longer happens in this file.
+
+In `tableView(commitEditingStyle, forRowAtIndexPath)`, the code still tries to call the old `saveWatchlist()` method. This is for swipe-to-delete. Change this to:
+
+	watchlist.removeAtIndex(indexPath.row)
+	watchlist.saveWatchlist()
 
 The main principle behind Object-Oriented Programming is that you organize your code into objects that contain both data and functionality. You don't perform operations on those objects, but you ask the objects to perform these operations on themselves. 
 
 That's why you moved things that are related to the watchlist, such as loading and saving, into Watchlist.swift. You can also do this with the code that sorts the items.
 
-> WatchViewController.swift
-
 If you look at **WatchViewController.swift**, you'll see that it also has a `sortItems()` method. Cut it out of this file and paste it into **Watchlist.swift**.
+
+Now everything that has to do with managing the watchlist sits in Watchlist.swift
 
 > Slide: 08 - Responsibilities
 
-Now WatchViewController is a lot cleaner and smaller. It is independent of any other view controllers and only uses the Watchlist object to communicate with the rest of the app.
+The view controller is a lot cleaner and smaller. It is independent of any other view controllers and only uses the Watchlist object to communicate with the rest of the app.
 
 Build and run, and the app should work as before.
 

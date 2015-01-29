@@ -68,18 +68,18 @@ In the following methods, where the code still uses the old `items` array, chang
 
 Cut the entire `// MARK: Persistence` section out of `WatchViewController` and paste it into **Watchlist.swift**.
 
-Back in **WatchViewController.swift**, in `tableView(commitEditingStyle, forRowAtIndexPath)`, change the first two lines into:
-
-	watchlist.removeAtIndex(indexPath.row)
-    watchlist.saveWatchlist()
-
-Remove `init(coder)`.
+In **Watchlist.swift**, call `loadWatchlist()` from the `init()` method.
 
 In **AppDelegate.swift**, remove the lines with errors, and add the following:
 
     WatchViewController.watchlist = watchlist
 
-In **Watchlist.swift**, call `loadWatchlist()` from the `init()` method.
+Back in **WatchViewController.swift**, remove `init(coder)`.
+
+In `tableView(commitEditingStyle, forRowAtIndexPath)`, change the first two lines into:
+
+	watchlist.removeAtIndex(indexPath.row)
+    watchlist.saveWatchlist()
 
 Cut the `sortItems()` method out of **WatchViewController.swift** and paste it into **Watchlist.swift**.
 

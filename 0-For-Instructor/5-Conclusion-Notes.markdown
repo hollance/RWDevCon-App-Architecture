@@ -1,4 +1,4 @@
-# Conclusion
+# 301: App Architecture (Conclusion)
 
 > Slide with title
 
@@ -22,8 +22,6 @@ You used the principles of decoupling, separation of concerns, and reducing depe
 
 To be fair, some of this stuff is overkill for many apps. If your app is simple enough, it may be perfectly fine to have the persistence logic inside your model objects, for example. Like any other design problem, these things are trade-offs. 
 
-But at least this talk should have given you some ideas now of how to take all that code out of your view controllers and place it into dedicated objects.
-
 Remember, MVC or Model-View-Controller is not the whole picture. Not everything has to be a model, a view, or a controller.
 
 As a rule, if your code becomes hard to understand, or you don't know where to put some new piece of logic, often the solution is to break it up into separate objects.
@@ -31,22 +29,6 @@ As a rule, if your code becomes hard to understand, or you don't know where to p
 Don’t be afraid to break your app into lots of smaller pieces.
 
 ## Where To Go From Here?
-
-We didn't have time to go into every possible architecture issue with this app, so here are some other possibilities left to explore.
-
-> Slide with bullet points
-
-For example:
-
-In the New Bid screen the user can type an amount that they want to bid. The app validates this input to make sure it's a number. That validation logic can go into a class of its own. This allows you to reuse it on other screens and in other projects.
-
-You can consider moving the table view data source into a separate class. For example, if you do that for ActivityViewController, you can also move the currency and date formatters into that new data source class, so the view controller becomes even smaller.
-
-An obvious thing that is missing from the current app is a login screen. I left that out for simplicity, but before users can place bids, the server should really know who they are.
-
-The interesting thing about authentication is that it can happen anywhere, at any time. The server may decide you've been inactive for too long and that you need to login again.
-
-This makes authentication a kind of "cross-cutting concern", meaning that every part of the app that wants to talk to the server should be prepared to bring up the login dialog. The ServerAPI code contains some hints of how to implement this, if you're curious.
 
 > Slide with books
 

@@ -15,7 +15,7 @@ body{-webkit-font-smoothing:antialiased;font-family:"Helvetica Neue",Helvetica,A
 </style>
 
 </head>
-<body class="normal">
+<body class="normal firstload">
   <div id="wrapper">
       <h1 id="301:apparchitecturepart2:demoinstructions">301: App Architecture, Part 2: Demo Instructions</h1>
 
@@ -25,35 +25,7 @@ body{-webkit-font-smoothing:antialiased;font-family:"Helvetica Neue",Helvetica,A
 
 <p>IMPORTANT: Use the <strong>2-Demo Starter</strong> project to perform these steps.</p>
 
-<h2 id="1connectthebidstotheiritems">1) Connect the Bids to their Items</h2>
-
-<p>In <strong>Bid.swift</strong>, remove the <code>itemID</code> and <code>itemName</code> instance variables.</p>
-
-<p>In their place, add a new instance variable:</p>
-
-<pre><code>weak var item: Item!
-</code></pre>
-
-<p>In <code>init(JSON)</code>, remove the lines that use the old <code>itemID</code> and <code>itemName</code> variables.</p>
-
-<p>Also do this in <code>init(coder)</code> and <code>encodeWithCoder()</code>.</p>
-
-<p>In <strong>Item.swift</strong>, add the following line to <code>addBid()</code>:</p>
-
-<pre><code>bid.item = self  // two-way relationship
-</code></pre>
-
-<p>In <code>init(coder)</code>, add the following after the call to <code>super</code>:</p>
-
-<pre><code>// Reconnect the bids with this item object.  
-for bid in bids {  
-  bid.item = self  
-}
-</code></pre>
-
-<p>Now new <code>Bid</code> objects are always connected to their <code>Item</code>s.</p>
-
-<h2 id="2itemdetailviewcontroller">2) Item Detail View Controller</h2>
+<h2 id="1itemdetailviewcontroller">1) Item Detail View Controller</h2>
 
 <p>Add a new instance variable to <strong>ItemDetailViewController.swift</strong>:</p>
 
@@ -91,7 +63,7 @@ var searchViewController: SearchViewController!
 var WatchViewController: WatchViewController!
 </code></pre>
 
-<h2 id="3watchviewcontroller">3) Watch View Controller</h2>
+<h2 id="2watchviewcontroller">2) Watch View Controller</h2>
 
 <p>In <strong>WatchViewController.swift</strong>, remove these instance variables:</p>
 
@@ -126,24 +98,24 @@ var items = [Item]()
 
 <p>Cut the entire <code>// MARK: Persistence</code> section out of <code>WatchViewController</code> and paste it into <strong>Watchlist.swift</strong>.</p>
 
-<p>Back in <strong>WatchViewController.swift</strong>, in <code>tableView(commitEditingStyle, forRowAtIndexPath)</code>, change the first two lines into:</p>
-
-<pre><code>watchlist.removeAtIndex(indexPath.row)  
-watchlist.saveWatchlist()
-</code></pre>
-
-<p>Remove <code>init(coder)</code>.</p>
+<p>In <strong>Watchlist.swift</strong>, call <code>loadWatchlist()</code> from the <code>init()</code> method.</p>
 
 <p>In <strong>AppDelegate.swift</strong>, remove the lines with errors, and add the following:</p>
 
 <pre><code>WatchViewController.watchlist = watchlist
 </code></pre>
 
-<p>In <strong>Watchlist.swift</strong>, call <code>loadWatchlist()</code> from the <code>init()</code> method.</p>
+<p>Back in <strong>WatchViewController.swift</strong>, remove <code>init(coder)</code>.</p>
+
+<p>In <code>tableView(commitEditingStyle, forRowAtIndexPath)</code>, change the first two lines into:</p>
+
+<pre><code>watchlist.removeAtIndex(indexPath.row)  
+watchlist.saveWatchlist()
+</code></pre>
 
 <p>Cut the <code>sortItems()</code> method out of <strong>WatchViewController.swift</strong> and paste it into <strong>Watchlist.swift</strong>.</p>
 
-<h2 id="4observing">4) Observing</h2>
+<h2 id="3observing">3) Observing</h2>
 
 <p>In <strong>Watchlist.swift</strong>, uncomment the following code in <code>addBid()</code>:</p>
 
@@ -165,7 +137,7 @@ for observer in observers {
 
 <p>At the bottom of the file, uncomment the code from the <code>// MARK: Observing the Data Model</code> section.</p>
 
-<h2 id="5otherbusinesslogic">5) Other business logic</h2>
+<h2 id="4otherbusinesslogic">4) Other business logic</h2>
 
 <p>In <strong>Item.swift</strong>, uncomment the code for the <code>highestBidAmount</code> property.</p>
 
@@ -188,7 +160,7 @@ for bid in item.bids {
 
 <p>Do the same in <strong>SearchViewController.swift</strong>.</p>
 
-<h2 id="6thatsit">6) That&#8217;s it!</h2>
+<h2 id="5thatsit">5) That&#8217;s it!</h2>
 
 <p>Congrats, you moved logic that really belongs to the domain model out of the view controller and into the <code>Watchlist</code> object.</p>
 

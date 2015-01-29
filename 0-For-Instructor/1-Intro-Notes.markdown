@@ -59,7 +59,7 @@ You want to reduce dependencies between the different parts of your app as much 
 
 This is what we call "separating the concerns". Your data model code is independent of the UI; the user interface code is independent of the network API; and so on. 
 
-Any changes are then localized to just their components; if you need to change the UI, you only have to change the UI code — none of the other code is affected because it’s all cleanly separated.
+Any changes are then localized to just their own components; if you need to change the UI, you only have to change the UI code — none of the other code is affected because it’s all cleanly separated.
 
 This also makes it much easier to write unit tests, because you can test each part of the app in isolation.
 
