@@ -57,12 +57,10 @@ class Watchlist {
   func addBid(bid: Bid, toItem item: Item) {
     item.addBid(bid)
 
-    /*
     // Notify the observers
     for observer in observers {
       observer.watchlist(self, addedBid: bid, toItem: item)
     }
-    */
   }
 
   // MARK: List of bids

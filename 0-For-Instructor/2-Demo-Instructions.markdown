@@ -72,7 +72,7 @@ In **Watchlist.swift**, call `loadWatchlist()` from the `init()` method.
 
 In **AppDelegate.swift**, remove the lines with errors, and add the following:
 
-    WatchViewController.watchlist = watchlist
+    watchViewController.watchlist = watchlist
 
 Back in **WatchViewController.swift**, remove `init(coder)`.
 
@@ -84,13 +84,6 @@ In `tableView(commitEditingStyle, forRowAtIndexPath)`, change the first two line
 Cut the `sortItems()` method out of **WatchViewController.swift** and paste it into **Watchlist.swift**.
 
 ## 3) Observing
-
-In **Watchlist.swift**, uncomment the following code in `addBid()`:
-
-    // Notify the observers
-    for observer in observers {
-      observer.watchlist(self, addedBid: bid, toItem: item)
-    }
 
 In **WatchViewController.swift**, add `WatchlistObserver` to the class declaration:
 
@@ -104,8 +97,6 @@ At the bottom of the file, uncomment the code from the `// MARK: Observing the D
 
 ## 4) Other business logic
 
-In **Item.swift**, uncomment the code for the `highestBidAmount` property.
-
 In **WatchViewController.swift**, remove this code:
 
 	var highestBidAmount = 0.0
@@ -113,7 +104,9 @@ In **WatchViewController.swift**, remove this code:
 	  highestBidAmount = max(bid.amount, highestBidAmount)
 	}
 
-Replace the line that sets `cell.highestBidLabel.text` with:
+In **Item.swift**, uncomment the code for the `highestBidAmount` property.
+
+In **WatchViewController.swift**, replace the line that sets `cell.highestBidLabel.text` with:
 
     if let highestBid = item.highestBid {
       cell.highestBidLabel.text = currencyFormatter.stringFromNumber(highestBid.amount)

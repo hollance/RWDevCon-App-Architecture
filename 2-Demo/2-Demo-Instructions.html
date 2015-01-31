@@ -15,7 +15,7 @@ body{-webkit-font-smoothing:antialiased;font-family:"Helvetica Neue",Helvetica,A
 </style>
 
 </head>
-<body class="normal firstload">
+<body class="normal">
   <div id="wrapper">
       <h1 id="301:apparchitecturepart2:demoinstructions">301: App Architecture, Part 2: Demo Instructions</h1>
 
@@ -102,7 +102,7 @@ var items = [Item]()
 
 <p>In <strong>AppDelegate.swift</strong>, remove the lines with errors, and add the following:</p>
 
-<pre><code>WatchViewController.watchlist = watchlist
+<pre><code>watchViewController.watchlist = watchlist
 </code></pre>
 
 <p>Back in <strong>WatchViewController.swift</strong>, remove <code>init(coder)</code>.</p>
@@ -116,14 +116,6 @@ watchlist.saveWatchlist()
 <p>Cut the <code>sortItems()</code> method out of <strong>WatchViewController.swift</strong> and paste it into <strong>Watchlist.swift</strong>.</p>
 
 <h2 id="3observing">3) Observing</h2>
-
-<p>In <strong>Watchlist.swift</strong>, uncomment the following code in <code>addBid()</code>:</p>
-
-<pre><code>// Notify the observers  
-for observer in observers {  
-  observer.watchlist(self, addedBid: bid, toItem: item)  
-}
-</code></pre>
 
 <p>In <strong>WatchViewController.swift</strong>, add <code>WatchlistObserver</code> to the class declaration:</p>
 
@@ -139,8 +131,6 @@ for observer in observers {
 
 <h2 id="4otherbusinesslogic">4) Other business logic</h2>
 
-<p>In <strong>Item.swift</strong>, uncomment the code for the <code>highestBidAmount</code> property.</p>
-
 <p>In <strong>WatchViewController.swift</strong>, remove this code:</p>
 
 <pre><code>var highestBidAmount = 0.0  
@@ -149,7 +139,9 @@ for bid in item.bids {
 }
 </code></pre>
 
-<p>Replace the line that sets <code>cell.highestBidLabel.text</code> with:</p>
+<p>In <strong>Item.swift</strong>, uncomment the code for the <code>highestBidAmount</code> property.</p>
+
+<p>In <strong>WatchViewController.swift</strong>, replace the line that sets <code>cell.highestBidLabel.text</code> with:</p>
 
 <pre><code>if let highestBid = item.highestBid {  
   cell.highestBidLabel.text = currencyFormatter.stringFromNumber(highestBid.amount)  
